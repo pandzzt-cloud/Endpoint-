@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>pynnzcek-end</title>
+<link rel="icon" href="https://files.catbox.moe/4bueup.jpg">
+
+<!-- ================= SECURITY HEADERS (meta-level) ================= -->
+<!-- CSP: batasi sumber resource, blokir inline script & eval -->
+<meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' https://cdn.jsdelivr.net;
+               style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+               font-src 'self' https://fonts.gstatic.com;
+               img-src 'self' https: data:;
+               connect-src 'self' https:;
+               frame-ancestors 'none';
+               base-uri 'self';
+               form-action 'self';
+               object-src 'none';">
+<meta http-equiv="X-Content-Type-Options" content="nosniff">
+<meta http-equiv="Referrer-Policy" content="no-referrer">
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), payment=(), usb=()">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="description" content="Realtime endpoint checker">
+<meta name="theme-color" content="#fef3c7">
+
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&family=Inter:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="hd">
+    <div class="lg"><img src="https://files.catbox.moe/4bueup.jpg" alt="logo"></div>
+    <div class="br">
+      <h1>pynnzcek<span>-end</span></h1>
+      <p>realtime endpoint checker · by pynnzdev</p>
+    </div>
+    <a class="wa" href="https://whatsapp.com/channel/0029VbCtxni8aKvSyouHcd01" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span>channel</span>
+    </a>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h2>Cek endpoint lo <span>sekarang</span></h2>
+    <p>Tempel URL, gua fetch real-time dan kasih hasil lengkap: status, waktu respon, content-type, ukuran body, dan preview isinya.</p>
+  </section>
+
+  <div class="inp-card">
+    <label for="inp">URL Endpoint</label>
+    <div class="inp-row">
+      <input type="text" id="inp" placeholder="https://api.contoh.com/endpoint" autocomplete="off" spellcheck="false" maxlength="2048">
+      <button type="button" id="btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <span>Cek Sekarang</span>
+      </button>
+    </div>
+
+    <!-- HONEYPOT: disembunyikan, bot akan mengisinya -->
+    <div class="hp-field" aria-hidden="true">
+      <label for="hp_field">Jangan isi field ini</label>
+      <input type="text" id="hp_field" name="website" tabindex="-1" autocomplete="off">
+    </div>
+
+    <!-- HUMAN CHECK: math captcha ringan -->
+    <div class="sec-panel">
+      <span class="lbl">human-check</span>
+      <span class="math" id="captcha_q">? + ? = ?</span>
+      <input type="text" id="captcha_ans" inputmode="numeric" maxlength="3" autocomplete="off" placeholder="...">
+      <button type="button" class="refresh" id="captcha_refresh" title="Ganti soal">&#8635;</button>
+      <span class="sec-status pending" id="sec_status">belum dijawab</span>
+    </div>
+
+    <div class="quick">
+      <span>coba:</span>
+      <button type="button" data-u="https://jsonplaceholder.typicode.com/posts/1">jsonplaceholder</button>
+      <button type="button" data-u="https://api.github.com/users/torvalds">github</button>
+      <button type="button" data-u="https://restcountries.com/v3.1/name/indonesia">restcountries</button>
+      <button type="button" data-u="https://pokeapi.co/api/v2/pokemon/pikachu">pokeapi</button>
+      <button type="button" data-u="https://dummyjson.com/products/1">dummyjson</button>
+      <button type="button" data-u="https://api.open-meteo.com/v1/forecast?latitude=-6.2&longitude=106.8&current_weather=true">open-meteo</button>
+    </div>
+  </div>
+
+  <div id="result"></div>
+
+  <div class="hint">
+    Catatan: cek dari sisi browser, jadi endpoint yang diblok CORS bakal keliatan error di sini padahal server aslinya nyala. Kalo hasilnya CORS error, coba test manual pakai tools server-side.
+    <br><br>
+    <strong>Proteksi aktif:</strong> honeypot anti-bot &middot; deteksi user-agent &middot; time-gate &middot; human-interaction check &middot; math captcha &middot; rate-limit (10/menit, 60/jam) &middot; validasi URL &amp; blokir SSRF &middot; CSP &amp; security headers.
+  </div>
+</main>
+
+<footer>
+  <div class="in">
+    <div class="l"><span>pynnzcek-end</span> create by pynnzdev</div>
+    <a href="https://whatsapp.com/channel/0029VbCtxni8aKvSyouHcd01" target="_blank" rel="noopener noreferrer">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      <span>saluran wa</span>
+    </a>
+  </div>
+</footer>
+
+<!-- security layer dimuat dulu, baru main script -->
+<script src="js/security.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
